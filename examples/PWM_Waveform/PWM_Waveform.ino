@@ -16,7 +16,7 @@
 #include "ATtiny_PWM.h"
 
 /*
-const uint8_t digital_pin_to_timer[] = {
+  const uint8_t digital_pin_to_timer[] = {
   // Left side, top to bottom
   TIMERA0,         // 0  PA4 WO4 WOA
   TIMERA0,         // 1  PA5 WO5 WOB
@@ -50,8 +50,8 @@ const uint8_t digital_pin_to_timer[] = {
   NOT_ON_TIMER,     // 19 PA2
   TIMERA0,          // 20 PA3 WO3
   NOT_ON_TIMER      // 21 PA0
-};
- */
+  };
+*/
 
 // OK, only PIN_PA4-5:TCA0
 // PIN_PC0-1: TCD0 => not OK yet for frequency

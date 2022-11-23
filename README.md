@@ -6,9 +6,11 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/ATtiny_PWM.svg)](http://github.com/khoih-prog/ATtiny_PWM/issues)
 
+
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
-<a href="https://profile-counter.glitch.me/khoih-prog-attiny-pwm/count.svg"  title="Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-attiny-pwm/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-attiny-pwm/count.svg"  title="ATtiny_PWM Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-attiny-pwm/count.svg" style="height: 30px;width: 200px;"></a>
 
 ---
 ---
@@ -97,7 +99,7 @@ For example, to run [Change_Interval example](https://github.com/khoih-prog/ATti
 
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/ATtiny_PWM/blob/main/pics/Change_Interval.png">
+    <img src="https://github.com/khoih-prog/ATtiny_PWM/raw/main/pics/Change_Interval.png">
 </p>
 
 
@@ -105,7 +107,7 @@ After drag-and-drop the `Change_Interval.ino.hex` into `CURIOSITY` virtual drive
 
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/ATtiny_PWM/blob/main/pics/CURIOSITY_drive.png">
+    <img src="https://github.com/khoih-prog/ATtiny_PWM/raw/main/pics/CURIOSITY_drive.png">
 </p>
 
 
@@ -175,7 +177,7 @@ Functions using normal software-based PWMs, relying on `loop()` and calling `mil
 ##### Curiosity Nano ATtiny3217
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/ATtiny_PWM/blob/main/pics/Curiosity_ATtiny3217.png">
+    <img src="https://github.com/khoih-prog/ATtiny_PWM/raw/main/pics/Curiosity_ATtiny3217.png">
 </p>
 
 
@@ -186,7 +188,7 @@ Functions using normal software-based PWMs, relying on `loop()` and calling `mil
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`SpenceKonde megaTinyCore core 2.6.3+`](https://github.com/SpenceKonde/megaTinyCore) for Arduino ATtiny boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/megaTinyCore.svg)](https://github.com/SpenceKonde/megaTinyCore/releases/latest). Follow [**megaTinyCore Installation**](https://github.com/SpenceKonde/megaTinyCore/blob/master/Installation.md).
+ 2. [`SpenceKonde megaTinyCore core 2.6.4+`](https://github.com/SpenceKonde/megaTinyCore) for Arduino ATtiny boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/megaTinyCore.svg)](https://github.com/SpenceKonde/megaTinyCore/releases/latest). Follow [**megaTinyCore Installation**](https://github.com/SpenceKonde/megaTinyCore/blob/master/Installation.md).
 
 ---
 ---
@@ -382,7 +384,7 @@ https://github.com/khoih-prog/ATtiny_PWM/blob/5e2c8076e07ff5bd60b23753dbc66d8a8e
 The following is the sample terminal output when running example [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) on **AVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`
 
 
-```
+```cpp
 Starting PWM_DynamicDutyCycle on AVR_ATtiny3217
 ATtiny_PWM v1.0.0
 [PWM] ATtiny_PWM: freq = 5000.00
@@ -423,7 +425,7 @@ Actual data: pin = 1, PWM DC = 90.00, PWMPeriod = 200.00, PWM Freq (Hz) = 5000.0
 
 The following is the sample terminal output when running example [**PWM_Multi**](examples/PWM_Multi) on **TAVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins
 
-```
+```cpp
 Starting PWM_Multi on AVR_ATtiny3217
 ATtiny_PWM v1.0.0
 [PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 19660
@@ -452,7 +454,7 @@ Actual data: pin = 12, PWM DC = 90.00, PWMPeriod = 125.00, PWM Freq (Hz) = 8000.
 
 The following is the sample terminal output when running example [**PWM_DynamicFreq**](examples/PWM_DynamicFreq) on **AVR_ATtiny3217**, to demonstrate the ability to change dynamically PWM frequencies
 
-```
+```cpp
 Starting PWM_DynamicFreq on AVR_ATtiny3217
 ATtiny_PWM v1.0.0
 [PWM] ATtiny_PWM: freq = 10000.00
@@ -499,7 +501,7 @@ Actual data: pin = 1, PWM DC = 50.00, PWMPeriod = 50.00, PWM Freq (Hz) = 20000.0
 The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
-```
+```cpp
 Starting PWM_Waveform on AVR_ATtiny3217
 ATtiny_PWM v1.0.0
 ============================================================================================
@@ -620,6 +622,6 @@ If you want to contribute to this project:
 
 ## Copyright
 
-Copyright 2022- Khoi Hoang
+Copyright (c) 2022- Khoi Hoang
 
 
