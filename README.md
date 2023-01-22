@@ -10,6 +10,7 @@
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
+
 ---
 ---
 
@@ -42,6 +43,7 @@
   * [ 5. PWM_Multi](examples/PWM_Multi)
   * [ 6. PWM_MultiChannel](examples/PWM_MultiChannel)
   * [ 7. PWM_Waveform](examples/PWM_Waveform)
+  * [ 8. PWM_StepperControl](examples/PWM_StepperControl) **New**
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_DynamicDutyCycle on AVR_ATtiny3217](#1-PWM_DynamicDutyCycle-on-AVR_ATtiny3217)
@@ -361,6 +363,7 @@ PWM_Instance->setPWM_manual(PWM_Pins, new_level);
  5. [PWM_Multi](examples/PWM_Multi)
  6. [PWM_MultiChannel](examples/PWM_MultiChannel)
  7. [PWM_Waveform](examples/PWM_Waveform)
+ 8. [PWM_StepperControl](examples/PWM_StepperControl) **New**
 
  
 ---
@@ -384,7 +387,7 @@ The following is the sample terminal output when running example [PWM_DynamicDut
 
 ```cpp
 Starting PWM_DynamicDutyCycle on AVR_ATtiny3217
-ATtiny_PWM v1.0.0
+ATtiny_PWM v1.0.1
 [PWM] ATtiny_PWM: freq = 5000.00
 [PWM] ATtiny_PWM: _dutycycle = 0
 =====================================================================================
@@ -425,7 +428,7 @@ The following is the sample terminal output when running example [**PWM_Multi**]
 
 ```cpp
 Starting PWM_Multi on AVR_ATtiny3217
-ATtiny_PWM v1.0.0
+ATtiny_PWM v1.0.1
 [PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 19660
 [PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
 [PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
@@ -454,7 +457,7 @@ The following is the sample terminal output when running example [**PWM_DynamicF
 
 ```cpp
 Starting PWM_DynamicFreq on AVR_ATtiny3217
-ATtiny_PWM v1.0.0
+ATtiny_PWM v1.0.1
 [PWM] ATtiny_PWM: freq = 10000.00
 [PWM] ATtiny_PWM: _dutycycle = 32767
 =====================================================================================
@@ -501,7 +504,7 @@ The following is the sample terminal output when running example [**PWM_Waveform
 
 ```cpp
 Starting PWM_Waveform on AVR_ATtiny3217
-ATtiny_PWM v1.0.0
+ATtiny_PWM v1.0.1
 ============================================================================================
 Actual data: pin = 1, PWM DutyCycle = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
 ============================================================================================
@@ -591,6 +594,9 @@ Submit issues to: [ATtiny_PWM issues](https://github.com/khoih-prog/ATtiny_PWM/i
 ## DONE
 
  1. Basic `TCA0` hardware PWM-channels for Arduino **AVR ATtiny-based boards (ATtiny3217, etc.)** using [**megaTinyCore**](https://github.com/SpenceKonde/megaTinyCore)
+ 2. Add example [PWM_StepperControl](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
+ 
+ 
 
 ---
 ---
@@ -599,12 +605,21 @@ Submit issues to: [ATtiny_PWM issues](https://github.com/khoih-prog/ATtiny_PWM/i
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
+1. Thanks to [Paul van Dinther](https://github.com/dinther) for proposing new way to use PWM to drive Stepper-Motor in [Using PWM to step a stepper driver #16](https://github.com/khoih-prog/RP2040_PWM/issues/16), leading to v2.0.3
+
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/dinther"><img src="https://github.com/dinther.png" width="100px;" alt="dinther"/><br /><sub><b>Paul van Dinther</b></sub></a><br /></td>
+  </tr>
+</table>
 
 ---
 
 ## Contributing
 
 If you want to contribute to this project:
+
 - Report bugs and errors
 - Ask for enhancements
 - Create issues and pull requests
