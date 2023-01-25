@@ -7,12 +7,13 @@
   Built by Khoi Hoang https://github.com/khoih-prog/ATtiny_PWM
   Licensed under MIT license
 
-  Version: 1.0.1
+  Version: 1.1.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      08/11/2022 Initial coding for AVR ATtiny (ATtiny3217, etc.) using megaTinyCore
   1.0.1   K Hoang      22/01/2023 Add `PWM_StepperControl` example
+  1.1.0   K Hoang      25/01/2023 Add `PWM_manual` example and function. Catch low frequency error
 *****************************************************************************************************************************/
 
 #pragma once
@@ -145,13 +146,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef AT_TINY_PWM_VERSION
-  #define AT_TINY_PWM_VERSION           F("ATtiny_PWM v1.0.1")
+  #define AT_TINY_PWM_VERSION           F("ATtiny_PWM v1.1.0")
 
   #define AT_TINY_PWM_VERSION_MAJOR     1
-  #define AT_TINY_PWM_VERSION_MINOR     0
-  #define AT_TINY_PWM_VERSION_PATCH     1
+  #define AT_TINY_PWM_VERSION_MINOR     1
+  #define AT_TINY_PWM_VERSION_PATCH     0
 
-  #define AT_TINY_PWM_VERSION_INT       1000001
+  #define AT_TINY_PWM_VERSION_INT       1001000
 #endif
 
 ////////////////////////////////////////
@@ -311,7 +312,7 @@ class ATtiny_PWM
 
   public:
 
-    // dutycycle from 0-65536 for 0%-100% to make use of 16-bit top register
+    // dutycycle from 0-65535 for 0%-100% to make use of 16-bit top register
     bool setPWM_Int(const uint8_t& pin, const float& frequency, uint16_t dutycycle)
     {
       dutycycle = map(dutycycle, 0, MAX_16BIT, 0, MAX_8BIT);
@@ -338,6 +339,9 @@ class ATtiny_PWM
       {
         case TIMERA0:
         {
+          if ( frequency < F_CPU / ( 64 * 256 ) )
+            PWM_LOGERROR1("setPWM_Int: frequency must be >=", F_CPU / ( 64 * 256 ) );
+          
           setPeriod_TimerA0(1000000UL / frequency);
 
           // start from 0, so to add 1 to DC and period
@@ -390,6 +394,9 @@ class ATtiny_PWM
           //////
 
           PWM_LOGDEBUG3("setPWM_Int: TIMERD0, _dutycycle =", _dutycycle, ", dutycycle =", dutycycle);
+          
+          if ( frequency < F_CPU / ( 32 * 256 ) )
+            PWM_LOGERROR1("setPWM_Int: frequency must be >=", F_CPU / ( 32 * 256 ) );
 
           uint8_t oldSREG = SREG;
 
@@ -502,6 +509,17 @@ class ATtiny_PWM
       PWM_LOGINFO3(F("setPWM_manual: _dutycycle ="), _dutycycle, F(", frequency ="), _frequency);
 
       return setPWM_Int(pin, _frequency, DCValue);
+    }
+    
+    ///////////////////////////////////////////
+    
+    // DCPercentage from 0.0f - 100.0f for 0-65535
+    bool setPWM_DCPercentage_manual(const uint8_t& pin, const float& DCPercentage)
+    {
+      // Convert to DCValue based on resolution = MAX_16BIT
+      PWM_LOGDEBUG3(F("setPWM_DCPercentage_manual: DCPercentage ="), DCPercentage, F(", dc ="), ( DCPercentage * MAX_16BIT ) / 100.0f);
+      
+      return setPWM_manual(pin, ( DCPercentage * MAX_16BIT ) / 100.0f);
     }
 
     ///////////////////////////////////////////

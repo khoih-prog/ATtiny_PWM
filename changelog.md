@@ -17,6 +17,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.1.0](#Releases-v110)
   * [Releases v1.0.1](#Releases-v101)
   * [Initial Releases v1.0.0](#Initial-Releases-v100)
 
@@ -24,6 +25,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.1.0
+
+1. Add example [PWM_manual](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) to demo how to correctly use PWM to generate waveform. Check [About DCValue in setPWM_manual #2](https://github.com/khoih-prog/AVR_PWM/discussions/2)
+2. Add function `setPWM_DCPercentage_manual()` to facilitate the setting PWM DC manually by using `DCPercentage`, instead of `absolute DCValue` depending on varying PWMPeriod
+3. Catch low frequency error and use lowest permissible frequency
 
 ### Releases v1.0.1
 

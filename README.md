@@ -44,12 +44,14 @@
   * [ 6. PWM_MultiChannel](examples/PWM_MultiChannel)
   * [ 7. PWM_Waveform](examples/PWM_Waveform)
   * [ 8. PWM_StepperControl](examples/PWM_StepperControl) **New**
+  * [ 9. PWM_manual](examples/PWM_manual) **New**
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_DynamicDutyCycle on AVR_ATtiny3217](#1-PWM_DynamicDutyCycle-on-AVR_ATtiny3217)
   * [2. PWM_Multi on AVR_ATtiny3217](#2-PWM_Multi-using-QuadTimers-on-AVR_ATtiny3217)
   * [3. PWM_DynamicFreq on AVR_ATtiny3217](#3-PWM_DynamicFreq-on-AVR_ATtiny3217)
   * [4. PWM_Waveform on AVR_ATtiny3217](#4-PWM_Waveform-on-AVR_ATtiny3217)
+  * [5. PWM_manual on AVR_ATtiny3217](#5-PWM_manual-on-AVR_ATtiny3217)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -336,6 +338,7 @@ Function prototype
 
 ```cpp
 bool setPWM_manual(const uint8_t& pin, const uint16_t& DCValue);
+bool setPWM_DCPercentage_manual(const uint8_t& pin, const float& DCPercentage);
 ```
 
 Need to call only once for each pin
@@ -348,7 +351,17 @@ PWM_Instance->setPWM(PWM_Pins, frequency, dutyCycle);
 after that, if just changing `dutyCycle` / `level`, use 
 
 ```cpp
+// dutycycle = 0.0f-100.0f <=> 0-MAX_16BIT
+// For 50.0f dutycycle
+new_level = 50.0f * MAX_16BIT / 100.0f ;
 PWM_Instance->setPWM_manual(PWM_Pins, new_level);
+```
+
+or better and much easier to use
+
+```cpp
+new_DCPercentage = 50.0f;
+PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_DCPercentage);
 ```
 
 ---
@@ -364,6 +377,7 @@ PWM_Instance->setPWM_manual(PWM_Pins, new_level);
  6. [PWM_MultiChannel](examples/PWM_MultiChannel)
  7. [PWM_Waveform](examples/PWM_Waveform)
  8. [PWM_StepperControl](examples/PWM_StepperControl) **New**
+ 9. [PWM_manual](examples/PWM_manual) **New**
 
  
 ---
@@ -387,7 +401,7 @@ The following is the sample terminal output when running example [PWM_DynamicDut
 
 ```cpp
 Starting PWM_DynamicDutyCycle on AVR_ATtiny3217
-ATtiny_PWM v1.0.1
+ATtiny_PWM v1.1.0
 [PWM] ATtiny_PWM: freq = 5000.00
 [PWM] ATtiny_PWM: _dutycycle = 0
 =====================================================================================
@@ -428,7 +442,7 @@ The following is the sample terminal output when running example [**PWM_Multi**]
 
 ```cpp
 Starting PWM_Multi on AVR_ATtiny3217
-ATtiny_PWM v1.0.1
+ATtiny_PWM v1.1.0
 [PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 19660
 [PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
 [PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
@@ -457,7 +471,7 @@ The following is the sample terminal output when running example [**PWM_DynamicF
 
 ```cpp
 Starting PWM_DynamicFreq on AVR_ATtiny3217
-ATtiny_PWM v1.0.1
+ATtiny_PWM v1.1.0
 [PWM] ATtiny_PWM: freq = 10000.00
 [PWM] ATtiny_PWM: _dutycycle = 32767
 =====================================================================================
@@ -504,7 +518,7 @@ The following is the sample terminal output when running example [**PWM_Waveform
 
 ```cpp
 Starting PWM_Waveform on AVR_ATtiny3217
-ATtiny_PWM v1.0.1
+ATtiny_PWM v1.1.0
 ============================================================================================
 Actual data: pin = 1, PWM DutyCycle = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
 ============================================================================================
@@ -552,6 +566,194 @@ Actual data: pin = 1, PWM DutyCycle = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 
 ```
 
 ---
+
+### 5. PWM_manual on AVR_ATtiny3217
+
+The following is the sample terminal output when running example [**PWM_manual**](examples/PWM_manual) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` and `setPWM_DCPercentage_manual()` functions in wafeform creation
+
+
+```cpp
+Starting PWM_manual on AVR_ATtiny3217
+ATtiny_PWM v1.1.0
+[PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 0
+[PWM] setPWM: _dutycycle = 0 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 0 , actual DC% = 0.64
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 0.00 , dc = 0.00
+[PWM] setPWM_manual: _dutycycle = 0 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 0 , actual DC% = 0.64
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 5.00 , dc = 3276.75
+[PWM] setPWM_manual: _dutycycle = 3276 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 7 , actual DC% = 5.10
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 5.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 10.00 , dc = 6553.50
+[PWM] setPWM_manual: _dutycycle = 6553 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 15 , actual DC% = 10.19
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 10.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 15.00 , dc = 9830.25
+[PWM] setPWM_manual: _dutycycle = 9830 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 23 , actual DC% = 15.29
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 15.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 20.00 , dc = 13107.00
+[PWM] setPWM_manual: _dutycycle = 13107 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 31 , actual DC% = 20.38
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 20.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 25.00 , dc = 16383.75
+[PWM] setPWM_manual: _dutycycle = 16383 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 39 , actual DC% = 25.48
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 25.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 30.00 , dc = 19660.50
+[PWM] setPWM_manual: _dutycycle = 19660 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 47 , actual DC% = 30.57
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 30.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 35.00 , dc = 22937.25
+[PWM] setPWM_manual: _dutycycle = 22937 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 55 , actual DC% = 35.67
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 35.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 40.00 , dc = 26214.00
+[PWM] setPWM_manual: _dutycycle = 26214 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 63 , actual DC% = 40.76
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 40.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 45.00 , dc = 29490.75
+[PWM] setPWM_manual: _dutycycle = 29490 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 70 , actual DC% = 45.22
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 45.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 50.00 , dc = 32767.50
+[PWM] setPWM_manual: _dutycycle = 32767 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 78 , actual DC% = 50.32
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 50.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 55.00 , dc = 36044.25
+[PWM] setPWM_manual: _dutycycle = 36044 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 86 , actual DC% = 55.41
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 55.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 60.00 , dc = 39321.00
+[PWM] setPWM_manual: _dutycycle = 39321 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 94 , actual DC% = 60.51
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 60.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 65.00 , dc = 42597.75
+[PWM] setPWM_manual: _dutycycle = 42597 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 101 , actual DC% = 64.97
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 65.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 70.00 , dc = 45874.50
+[PWM] setPWM_manual: _dutycycle = 45874 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 109 , actual DC% = 70.06
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 70.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 75.00 , dc = 49151.25
+[PWM] setPWM_manual: _dutycycle = 49151 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 117 , actual DC% = 75.16
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 75.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 80.00 , dc = 52428.00
+[PWM] setPWM_manual: _dutycycle = 52428 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 125 , actual DC% = 80.25
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 80.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 85.00 , dc = 55704.75
+[PWM] setPWM_manual: _dutycycle = 55704 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 133 , actual DC% = 85.35
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 85.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 90.00 , dc = 58981.50
+[PWM] setPWM_manual: _dutycycle = 58981 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 141 , actual DC% = 90.45
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 90.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 95.00 , dc = 62258.25
+[PWM] setPWM_manual: _dutycycle = 62258 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 149 , actual DC% = 95.54
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 95.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+[PWM] setPWM_DCPercentage_manual: DCPercentage = 100.00 , dc = 65535.00
+[PWM] setPWM_manual: _dutycycle = 65535 , frequency = 2000.00
+[PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
+[PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
+[PWM] setPWM_Int: TCA0 pin = 1 dutycycle = 157 , actual DC% = 100.64
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 100.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+```
+
+---
 ---
 
 ### Debug
@@ -595,7 +797,9 @@ Submit issues to: [ATtiny_PWM issues](https://github.com/khoih-prog/ATtiny_PWM/i
 
  1. Basic `TCA0` hardware PWM-channels for Arduino **AVR ATtiny-based boards (ATtiny3217, etc.)** using [**megaTinyCore**](https://github.com/SpenceKonde/megaTinyCore)
  2. Add example [PWM_StepperControl](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
- 
+ 3. Add example [PWM_manual](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) to demo how to correctly use PWM to generate waveform
+ 4. Add function `setPWM_DCPercentage_manual()` to facilitate the setting PWM DC manually by using `DCPercentage`, instead of `absolute DCValue` depending on varying PWMPeriod
+ 5. Catch low frequency error and use lowest permissible frequency
  
 
 ---
@@ -605,7 +809,7 @@ Submit issues to: [ATtiny_PWM issues](https://github.com/khoih-prog/ATtiny_PWM/i
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
-1. Thanks to [Paul van Dinther](https://github.com/dinther) for proposing new way to use PWM to drive Stepper-Motor in [Using PWM to step a stepper driver #16](https://github.com/khoih-prog/RP2040_PWM/issues/16), leading to v2.0.3
+1. Thanks to [Paul van Dinther](https://github.com/dinther) for proposing new way to use PWM to drive Stepper-Motor in [Using PWM to step a stepper driver #16](https://github.com/khoih-prog/RP2040_PWM/issues/16), leading to v1.0.1
 
 
 <table>
