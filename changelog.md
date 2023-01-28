@@ -17,6 +17,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.2.0](#Releases-v120)
   * [Releases v1.1.0](#Releases-v110)
   * [Releases v1.0.1](#Releases-v101)
   * [Initial Releases v1.0.0](#Initial-Releases-v100)
@@ -25,6 +26,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.2.0
+
+1. Optimize speed with new `setPWM_DCPercentageInt_manual` function to improve speed almost 50% compared to `setPWM_DCPercentage_manual` of previous `v1.1.0`
+2. Add example [PWM_SpeedTest](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_SpeedTest) to demo the better speed of new `setPWM_DCPercentageInt_manual` function
+3. Improve `README.md` so that links can be used in other sites, such as PIO
 
 ### Releases v1.1.0
 

@@ -36,15 +36,16 @@
   * [3. Set or change PWM frequency or dutyCycle](#3-set-or-change-PWM-frequency-or-dutyCycle)
   * [4. Set or change PWM frequency and dutyCycle manually and efficiently in waveform creation](#4-Set-or-change-PWM-frequency-and-dutyCycle-manually-and-efficiently-in-waveform-creation)
 * [Examples](#examples)
-  * [ 1. PWM_Basic](examples/PWM_Basic)
-  * [ 2. PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) 
-  * [ 3. PWM_DynamicDutyCycle_Int](examples/PWM_DynamicDutyCycle_Int)
-  * [ 4. PWM_DynamicFreq](examples/PWM_DynamicFreq)
-  * [ 5. PWM_Multi](examples/PWM_Multi)
-  * [ 6. PWM_MultiChannel](examples/PWM_MultiChannel)
-  * [ 7. PWM_Waveform](examples/PWM_Waveform)
-  * [ 8. PWM_StepperControl](examples/PWM_StepperControl) **New**
-  * [ 9. PWM_manual](examples/PWM_manual) **New**
+  * [ 1. PWM_Basic](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Basic)
+  * [ 2. PWM_DynamicDutyCycle](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicDutyCycle) 
+  * [ 3. PWM_DynamicDutyCycle_Int](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicDutyCycle_Int)
+  * [ 4. PWM_DynamicFreq](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicFreq)
+  * [ 5. PWM_Multi](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Multi)
+  * [ 6. PWM_MultiChannel](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_MultiChannel)
+  * [ 7. PWM_Waveform](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Waveform)
+  * [ 8. PWM_StepperControl](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_StepperControl) **New**
+  * [ 9. PWM_manual](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) **New**
+  * [10. PWM_SpeedTest](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_SpeedTest) **New**
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_DynamicDutyCycle on AVR_ATtiny3217](#1-PWM_DynamicDutyCycle-on-AVR_ATtiny3217)
@@ -52,6 +53,7 @@
   * [3. PWM_DynamicFreq on AVR_ATtiny3217](#3-PWM_DynamicFreq-on-AVR_ATtiny3217)
   * [4. PWM_Waveform on AVR_ATtiny3217](#4-PWM_Waveform-on-AVR_ATtiny3217)
   * [5. PWM_manual on AVR_ATtiny3217](#5-PWM_manual-on-AVR_ATtiny3217)
+  * [6. PWM_SpeedTest on AVR_ATtiny3217](#6-PWM_SpeedTest-on-AVR_ATtiny3217)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -148,7 +150,7 @@ This important feature is absolutely necessary for mission-critical tasks. These
 
 New efficient `setPWM_manual()` function enables waveform creation using PWM.
 
-The [**PWM_Multi**](examples/PWM_Multi) example will demonstrate the usage of multichannel PWM using multiple Hardware-PWM blocks (Timer & Channel). The 2 independent Hardware-PWM channels are used **to control 2 different PWM outputs**, with totally independent frequencies and dutycycles on `ATtiny-based boards`.
+The [**PWM_Multi**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Multi) example will demonstrate the usage of multichannel PWM using multiple Hardware-PWM blocks (Timer & Channel). The 2 independent Hardware-PWM channels are used **to control 2 different PWM outputs**, with totally independent frequencies and dutycycles on `ATtiny-based boards`.
 
 Being hardware-based PWM, their executions are not blocked by bad-behaving functions / tasks, such as connecting to WiFi, Internet or Blynk services.
 
@@ -339,6 +341,7 @@ Function prototype
 ```cpp
 bool setPWM_manual(const uint8_t& pin, const uint16_t& DCValue);
 bool setPWM_DCPercentage_manual(const uint8_t& pin, const float& DCPercentage);
+bool setPWM_DCPercentageInt_manual(const uint8_t& pin, const uint16_t& DCPercentage);
 ```
 
 Need to call only once for each pin
@@ -348,42 +351,53 @@ Need to call only once for each pin
 PWM_Instance->setPWM(PWM_Pins, frequency, dutyCycle);
 ```
 
-after that, if just changing `dutyCycle` / `level`, use 
+after that, if just changing `dutyCycle` / `level`, use the `faster`
 
 ```cpp
-// dutycycle = 0.0f-100.0f <=> 0-MAX_16BIT
 // For 50.0f dutycycle
-new_level = 50.0f * MAX_16BIT / 100.0f ;
+// 97465ns
+new_level = 50.0f * PWM_Instance->getPWMPeriod() / 100.0f ;
 PWM_Instance->setPWM_manual(PWM_Pins, new_level);
 ```
 
-or better and much easier to use
+or better and much easier to use, but `slowest`
 
 ```cpp
+// v1.2.0: 129500ns. Previous v1.1.0 : 169577ns
 new_DCPercentage = 50.0f;
 PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_DCPercentage);
 ```
+
+or the **fastest**
+
+```cpp
+// dutycyclePercent = 0-65535 == 0-100%
+// Faster, 94197ns
+dutycyclePercentInt = MAX_16BIT / 2;   // 50%
+PWM_Instance->setPWM_DCPercentageInt_manual(pinToUse, dutycyclePercentInt);
+```
+
 
 ---
 ---
 
 ### Examples: 
 
- 1. [PWM_Basic](examples/PWM_Basic)
- 2. [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle)
- 3. [PWM_DynamicDutyCycle_Int](examples/PWM_DynamicDutyCycle_Int)
- 4. [PWM_DynamicFreq](examples/PWM_DynamicFreq)
- 5. [PWM_Multi](examples/PWM_Multi)
- 6. [PWM_MultiChannel](examples/PWM_MultiChannel)
- 7. [PWM_Waveform](examples/PWM_Waveform)
- 8. [PWM_StepperControl](examples/PWM_StepperControl) **New**
- 9. [PWM_manual](examples/PWM_manual) **New**
-
+ 1. [PWM_Basic](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Basic)
+ 2. [PWM_DynamicDutyCycle](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicDutyCycle)
+ 3. [PWM_DynamicDutyCycle_Int](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicDutyCycle_Int)
+ 4. [PWM_DynamicFreq](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicFreq)
+ 5. [PWM_Multi](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Multi)
+ 6. [PWM_MultiChannel](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_MultiChannel)
+ 7. [PWM_Waveform](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Waveform)
+ 8. [PWM_StepperControl](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_StepperControl) **New**
+ 9. [PWM_manual](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) **New**
+10. [PWM_SpeedTest](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_SpeedTest) **New**
  
 ---
 ---
 
-### Example [PWM_Multi](examples/PWM_Multi)
+### Example [PWM_Multi](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Multi)
 
 
 https://github.com/khoih-prog/ATtiny_PWM/blob/5e2c8076e07ff5bd60b23753dbc66d8a8ebf4c74/examples/PWM_Multi/PWM_Multi.ino#L11-L141
@@ -396,12 +410,12 @@ https://github.com/khoih-prog/ATtiny_PWM/blob/5e2c8076e07ff5bd60b23753dbc66d8a8e
 
 ### 1. PWM_DynamicDutyCycle on AVR_ATtiny3217
 
-The following is the sample terminal output when running example [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) on **AVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`
+The following is the sample terminal output when running example [PWM_DynamicDutyCycle](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicDutyCycle) on **AVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`
 
 
 ```cpp
 Starting PWM_DynamicDutyCycle on AVR_ATtiny3217
-ATtiny_PWM v1.1.0
+ATtiny_PWM v1.2.0
 [PWM] ATtiny_PWM: freq = 5000.00
 [PWM] ATtiny_PWM: _dutycycle = 0
 =====================================================================================
@@ -438,11 +452,11 @@ Actual data: pin = 1, PWM DC = 90.00, PWMPeriod = 200.00, PWM Freq (Hz) = 5000.0
 
 ### 2. PWM_Multi on AVR_ATtiny3217
 
-The following is the sample terminal output when running example [**PWM_Multi**](examples/PWM_Multi) on **TAVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins
+The following is the sample terminal output when running example [**PWM_Multi**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Multi) on **TAVR_ATtiny3217**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins
 
 ```cpp
 Starting PWM_Multi on AVR_ATtiny3217
-ATtiny_PWM v1.1.0
+ATtiny_PWM v1.2.0
 [PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 19660
 [PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
 [PWM] setPeriod_TimerA0: pwmPeriod = 156 , _actualFrequency = 2003
@@ -467,11 +481,11 @@ Actual data: pin = 12, PWM DC = 90.00, PWMPeriod = 125.00, PWM Freq (Hz) = 8000.
 
 ### 3. PWM_DynamicFreq on AVR_ATtiny3217
 
-The following is the sample terminal output when running example [**PWM_DynamicFreq**](examples/PWM_DynamicFreq) on **AVR_ATtiny3217**, to demonstrate the ability to change dynamically PWM frequencies
+The following is the sample terminal output when running example [**PWM_DynamicFreq**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_DynamicFreq) on **AVR_ATtiny3217**, to demonstrate the ability to change dynamically PWM frequencies
 
 ```cpp
 Starting PWM_DynamicFreq on AVR_ATtiny3217
-ATtiny_PWM v1.1.0
+ATtiny_PWM v1.2.0
 [PWM] ATtiny_PWM: freq = 10000.00
 [PWM] ATtiny_PWM: _dutycycle = 32767
 =====================================================================================
@@ -513,12 +527,12 @@ Actual data: pin = 1, PWM DC = 50.00, PWMPeriod = 50.00, PWM Freq (Hz) = 20000.0
 
 ### 4. PWM_Waveform on AVR_ATtiny3217
 
-The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
+The following is the sample terminal output when running example [**PWM_Waveform**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_Waveform) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
 ```cpp
 Starting PWM_Waveform on AVR_ATtiny3217
-ATtiny_PWM v1.1.0
+ATtiny_PWM v1.2.0
 ============================================================================================
 Actual data: pin = 1, PWM DutyCycle = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
 ============================================================================================
@@ -569,12 +583,12 @@ Actual data: pin = 1, PWM DutyCycle = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 
 
 ### 5. PWM_manual on AVR_ATtiny3217
 
-The following is the sample terminal output when running example [**PWM_manual**](examples/PWM_manual) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` and `setPWM_DCPercentage_manual()` functions in wafeform creation
+The following is the sample terminal output when running example [**PWM_manual**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) on **AVR_ATtiny3217**, to demonstrate how to use the `setPWM_manual()` and `setPWM_DCPercentage_manual()` functions in wafeform creation
 
 
 ```cpp
 Starting PWM_manual on AVR_ATtiny3217
-ATtiny_PWM v1.1.0
+ATtiny_PWM v1.2.0
 [PWM] ATtiny_PWM: freq = 2000.00 , _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0 , frequency = 2000.00
 [PWM] setPeriod_TimerA0: F_CPU = 20000000 , microseconds = 500 , TCA_Freq_mult = 1.00
@@ -753,6 +767,59 @@ Actual data: pin = 1, PWM DutyCycle % = 100.00, PWMPeriod = 500.00, PWM Freq (Hz
 =================================================================================================
 ```
 
+
+---
+
+### 6. PWM_SpeedTest on AVR_ATtiny3217
+
+The following is the sample terminal output when running example [**PWM_SpeedTest**](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_SpeedTest) on **AVR_ATtiny3217**, to demonstrate how to use new faster `setPWM_DCPercentageInt_manual()` function in wafeform creation, The time is `94197ns` compared to `169577ns` when using `setPWM_DCPercentage_manual()` function of `v1.1.0`. The `setPWM_manual` with `97465ns` is to be used with pre-calculated values in array
+
+##### USING_DC_PERCENT
+
+```
+Starting PWM_SpeedTest on AVR_ATtiny3217
+ATtiny_PWM v1.2.0
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+Average time of setPWM function USING_DC_PERCENT
+count=10607, ns=94277
+count=10616, ns=94197
+count=10616, ns=94197
+count=10607, ns=94277
+count=10616, ns=94197
+count=10615, ns=94206
+count=10607, ns=94277
+count=10616, ns=94197
+count=10616, ns=94197
+count=10616, ns=94197
+count=10607, ns=94277
+```
+
+##### not USING_DC_PERCENT
+
+```
+Starting PWM_SpeedTest on AVR_ATtiny3217
+ATtiny_PWM v1.2.0
+=================================================================================================
+Actual data: pin = 1, PWM DutyCycle % = 0.00, PWMPeriod = 500.00, PWM Freq (Hz) = 2000.0000
+=================================================================================================
+Average time of setPWM function not USING_DC_PERCENT
+count=10248, ns=97580
+count=10261, ns=97456
+count=10260, ns=97465
+count=10252, ns=97541
+count=10260, ns=97465
+count=10260, ns=97465
+count=10252, ns=97541
+count=10260, ns=97465
+count=10261, ns=97456
+count=10260, ns=97465
+count=10252, ns=97541
+count=10260, ns=97465
+
+```
+
 ---
 ---
 
@@ -800,7 +867,8 @@ Submit issues to: [ATtiny_PWM issues](https://github.com/khoih-prog/ATtiny_PWM/i
  3. Add example [PWM_manual](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_manual) to demo how to correctly use PWM to generate waveform
  4. Add function `setPWM_DCPercentage_manual()` to facilitate the setting PWM DC manually by using `DCPercentage`, instead of `absolute DCValue` depending on varying PWMPeriod
  5. Catch low frequency error and use lowest permissible frequency
- 
+ 6. Optimize speed with new `setPWM_DCPercentageInt_manual` function to improve speed almost 50% compared to `setPWM_DCPercentage_manual` of previous `v1.1.0`
+ 7. Add example [PWM_SpeedTest](https://github.com/khoih-prog/ATtiny_PWM/tree/main/examples/PWM_SpeedTest) to demo the better speed of new `setPWM_DCPercentageInt_manual` function
 
 ---
 ---
