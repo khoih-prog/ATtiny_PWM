@@ -7,13 +7,14 @@
   Built by Khoi Hoang https://github.com/khoih-prog/ATtiny_PWM
   Licensed under MIT license
 
-  Version: 1.1.0
+  Version: 1.2.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      08/11/2022 Initial coding for AVR ATtiny (ATtiny3217, etc.) using megaTinyCore
   1.0.1   K Hoang      22/01/2023 Add `PWM_StepperControl` example
   1.1.0   K Hoang      25/01/2023 Add `PWM_manual` example and function. Catch low frequency error
+  1.2.0   K Hoang      27/01/2023 Add `PWM_SpeedTest` example and faster `setPWM_DCPercentageInt_manual` function
  *****************************************************************************************************************************/
 
 #pragma once
